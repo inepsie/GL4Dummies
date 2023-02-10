@@ -170,7 +170,7 @@ static void            mkGrid2dNormalsf(GLuint width, GLuint height, GLfloat * d
 static inline void     triangleNormalf(GLfloat * out, GLfloat * p0, GLfloat * p1, GLfloat * p2);
 static inline int      _maxi(int a, int b);
 static inline int      _mini(int a, int b);
-  
+
 void gl4dgInit(void) {
   int i;
   if(_hasInit) return;
@@ -810,7 +810,7 @@ static GL4Dvaoindex * mkRegularGridStripsAdjacencyIndices(GLuint width, GLuint h
       index[k++] = nnzw + x - 1; /* (x - 1, z + 2) */
       index[k++] = nzw  + x;     /* (x, z + 1) */
     }
-    index[k++] = zw + width - 1;  /* (w, z) -> (w - 1, z) */    
+    index[k++] = zw + width - 1;  /* (w, z) -> (w - 1, z) */
   }
   return index;
 }
@@ -1207,4 +1207,3 @@ static inline int _maxi(int a, int b) {
 static inline int _mini(int a, int b) {
   return a < b ? a : b;
 }
-
