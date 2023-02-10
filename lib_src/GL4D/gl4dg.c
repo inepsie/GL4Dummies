@@ -154,6 +154,11 @@ static void            freeGeom(void * data);
 static GLuint          genId(void);
 static GLuint          mkStaticf(geom_e type);
 static GLfloat       * mkSphereVerticesf(GLuint slices, GLuint stacks);
+//
+static GLfloat * mkTeapotVerticesf_V2(GLuint slices, GLuint stacks);
+static GLfloat * mkTeapotChapVerticesf_V2(GLuint slices, GLuint stacks);
+static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint stacks, GLuint spout);
+//
 static GL4Dvaoindex  * mkRegularGridTriangleIndices(GLuint width, GLuint height);
 static GL4Dvaoindex  * mkRegularGridStripsIndices(GLuint width, GLuint height);
 static GL4Dvaoindex  * mkRegularGridStripIndices(GLuint width, GLuint height);
@@ -208,6 +213,277 @@ void gl4dgSetGeometryOptimizationLevel(GLuint level) {
 GLuint gl4dgGetVAO(GLuint id) {
   return _garray[--id].vao;
 }
+
+////////////////THEO AJOUT
+void lerp(float * v, int i, float t){
+  for(int j=0 ; j<3 ; ++j){
+    v[i+j] = (1-t) * v[i+j] + t*v[i+j+3];
+  }
+}
+
+//Calcul de points sur une courbe de Bézier par la méthode de Casteljau
+static GLfloat * biBezier(float * vect_pBezier, int nb_pBezier, int nb_pOut){
+  float pas = 1.0f/(float)nb_pOut;
+  int size_pBezier = 3 * nb_pBezier;
+  int size_pData = 3 * (nb_pOut+1) * 2;
+  //Allocation du vecteur dans lequel s'opère les différentes interpolation linéaire pour aboutir au point recherché:
+  float * vect_process = (float*) malloc(size_pBezier * sizeof * vect_process);
+  //Allocation du vecteur de sortie, contenant coordonnées des points ainsi que leurs vecteur tangents associés:
+  float * data = (float*) malloc(size_pData * sizeof * data);
+  assert(vect_process);
+  assert(data);
+
+  for(int n=0 ; n<size_pData ; n+=6){
+    memcpy(vect_process, vect_pBezier, size_pBezier * sizeof * vect_pBezier);//Reset de vect_process à l'état de vect_pBezier
+    for(int j=size_pBezier-3 ; j>0 ; j-=3){
+      //Avant le dernier tour d'interpolation linéaire (j==3) nous obtenons deux points qui définissent un vecteur tangent au point final:
+      if(j==3){
+        data[n+3] = vect_process[3] - vect_process[0];
+        data[n+4] = vect_process[4] - vect_process[1];
+        data[n+5] = vect_process[5] - vect_process[2];
+      }
+      for(int i=0 ; i<j ; i+=3){//Interpolations linéaires intermédiaires (j>3) jusqu'à l'interpolation linéaire finale (j==3)
+        lerp(vect_process, i, pas*((float)n/6.0f));
+      }
+    }
+    data[n] = vect_process[0];
+    data[n+1] = vect_process[1];
+    data[n+2] = vect_process[2];
+  }
+  free(vect_process);
+  return data;
+}
+
+
+GLfloat * rotY(float * p, float a){
+  float * rotated = malloc(3 * sizeof *rotated);
+  rotated[0] = cos(a)*p[0] + sin(a)*p[2];
+  rotated[1] = p[1];
+  rotated[2] = -1*sin(a)*p[0] + cos(a)*p[2];
+  return rotated;
+}
+
+GLfloat * rotZ(float * p, float a){
+  float rotated[] = {0., 0., 0.};
+  rotated[0] = cos(a) * p[0] - sin(a) * p[1];
+  rotated[1] = sin(a) * p[0] + cos(a) * p[1];
+  rotated[2] = p[2];
+  p[0] = rotated[0];
+  p[1] = rotated[1];
+  p[2] = rotated[2];
+  return rotated;
+}
+
+GLuint gl4dgGenTeapotSpoutf_V2(GLuint slices, GLuint stacks, GLuint spout) {
+  GLfloat init_points_spout[] = {
+    0.0f, 0.0f, 0.0f,
+    10.0f, 0.0f, 0.0f,
+    4.0f, 6.0f, 0.0f,
+    8.0f, 8.0f, 0.0f
+  };
+  GLfloat init_points_handle[] = {
+    7.5f, 8.0f, 0.0f,
+    0.0f, 12.0f, 0.0f,
+    0.0f, 2.45f, 0.0f,
+    6.0f, 2.5f, 0.0f
+  };
+  GLfloat * idata = NULL;
+  GLfloat * courbe_points = NULL;
+  GL4Dvaoindex * index = NULL;
+  GLuint i = genId();
+  gsphere_t * s = malloc(sizeof *s);
+  assert(s);
+  _garray[i].geom = s;
+  _garray[i].type = GE_SPHERE;
+  s->slices = slices; s->stacks = stacks;
+  // courbe_points = malloc((stacks+1) * 3 * 2 * sizeof *courbe_points);//Ne pas malloc?
+
+  if(spout){
+    courbe_points = biBezier(init_points_spout, 4, stacks+1);
+  }
+  else{
+    courbe_points = biBezier(init_points_handle, 4, stacks+1);
+  }
+  assert(courbe_points);//same
+  idata = mkTeapotSpoutVerticesf_V2(courbe_points, slices, stacks, spout);
+  SELECT_GEOMETRY_OPTIMIZATION(index, s, slices, stacks + 1);
+  glGenVertexArrays(1, &_garray[i].vao);
+  glBindVertexArray(_garray[i].vao);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+  glEnableVertexAttribArray(2);
+  glGenBuffers(2, s->buffers);
+  glBindBuffer(GL_ARRAY_BUFFER, s->buffers[0]);
+  glBufferData(GL_ARRAY_BUFFER, 6 * (slices + 1) * (stacks + 1) * sizeof *idata, idata, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)(3 * sizeof *idata));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)(3 * sizeof *idata));
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[1]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, s->index_row_count * s->index_nb_rows * sizeof *index, index, GL_STATIC_DRAW);
+  free(idata);
+  free(index);
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  return ++i;
+}
+//Sur chacun des points d'une courbe on place des points sur le plan orthogonal associé afin de générer du volume:
+static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint stacks, GLuint spout) {
+  GLdouble y, z, phi;
+  GLdouble c2MPI_Long = 2.0 * M_PI / slices;
+  GLfloat rotz, roty;
+  GLfloat p[3] = { 0.0, 0.0, 0.0 };
+  GLfloat normale[3] = { 0.0, 0.0, 0.0 };
+  //Allocation du vecteur de sortie:
+  GLfloat * data = malloc((stacks+1) * (slices+1) * 3 * 2 * sizeof *data);
+  for(int j=0 ; j <= (int)(stacks) ; ++j){
+    //Pour chaque point X de la courbe on calcul les rotations nécessaire pour rendre colinéaire le vecteur {1,0,0} au vecteur tangent de X
+    rotz = atan2(vect[6*j+3+1], vect[6*j+3]);
+    roty = /*-1 * */ atan2(vect[6*j+3+2], vect[6*j+3]);
+    //On place les points du cercle sur le plan (y,z)
+    for(int i=0 ; i <= (int)slices ; ++i){
+      phi = i * c2MPI_Long;
+      y = sin(phi);
+      z = cos(phi);
+      if(spout){
+        y *= (1 + 4.0 / (float) (j + 1));
+        z *= (1 + 4.0 / (float) (j * j + 1));
+      }
+      //y = sin(phi) * (1 + 4.0/(float)(j+1));
+      //z = cos(phi) * (1 + 4.0/(float)(j*j+1));
+      p[0] = 0.0f;
+      p[1] = y;
+      p[2] = z;
+      rotY(rotZ(p, rotz), roty);//Rotation du point p
+      normale[0] = p[0];
+      normale[1] = p[1];
+      normale[2] = p[2];
+      p[0] += vect[6*j];
+      p[1] += vect[6*j+1];
+      p[2] += vect[6*j+2];//Translation pour replacer les points du cercle autour du point de la courbe
+      data[(j*slices+i)*6] = p[0];
+      data[(j*slices+i)*6 + 1] = p[1];
+      data[(j*slices+i)*6 + 2] = p[2];
+      data[(j*slices+i)*6 + 3] = normale[0];
+      data[(j*slices+i)*6 + 4] = normale[1];
+      data[(j*slices+i)*6 + 5] = normale[2];
+    }
+  }
+  return data;
+}
+GLuint gl4dgGenTeapotf_V2(GLuint slices, GLuint stacks) {
+  GLfloat * idata = NULL;
+  GL4Dvaoindex * index = NULL;
+  GLuint i = genId();
+  gsphere_t * s = malloc(sizeof *s);
+  assert(s);
+  _garray[i].geom = s;
+  _garray[i].type = GE_SPHERE;
+  s->slices = slices; s->stacks = stacks;
+  idata = mkTeapotVerticesf_V2(slices, stacks);
+  SELECT_GEOMETRY_OPTIMIZATION(index, s, slices + 1, stacks + 1);
+  glGenVertexArrays(1, &_garray[i].vao);
+  glBindVertexArray(_garray[i].vao);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+  glEnableVertexAttribArray(2);
+  glGenBuffers(2, s->buffers);
+  glBindBuffer(GL_ARRAY_BUFFER, s->buffers[0]);
+  glBufferData(GL_ARRAY_BUFFER, 5 * (slices + 1) * (stacks + 1) * sizeof *idata, idata, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)(3 * sizeof *idata));
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[1]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, s->index_row_count * s->index_nb_rows * sizeof *index, index, GL_STATIC_DRAW);
+  free(idata);
+  free(index);
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  return ++i;
+}
+static GLfloat * mkTeapotVerticesf_V2(GLuint slices, GLuint stacks) {
+  int i, j, k;
+  GLdouble phi, theta, r, y;
+  GLfloat * data;
+  GLdouble c2MPI_Long = 2.0 * M_PI / slices;
+  GLdouble cMPI_Lat = M_PI / stacks;
+  data = malloc(5 * (slices + 1) * (stacks + 1) * sizeof *data);
+  assert(data);
+  for(i = 0, k = 0; i <= (int)stacks; ++i) {
+    theta  = -M_PI_2 + i * cMPI_Lat;
+    y = sin(theta);
+    //0.8+0.3 sin(2 (x+0.3)^(2)-3.8)
+    r = 0.8 + 0.3 * sin(2 * pow((y+0.3),2)-3.8);
+    for(j = 0; j <= (int)slices; ++j) {
+    phi = j * c2MPI_Long;
+    data[k++] = r * cos(phi);
+    data[k++] = y;
+    data[k++] = r * sin(phi);
+    data[k++] = phi / (2.0 * M_PI);
+    data[k++] = (theta + M_PI_2) / M_PI;
+    }
+  }
+  return data;
+}
+static GLfloat * mkTeapotChapVerticesf_V2(GLuint slices, GLuint stacks) {
+  int i, j, k;
+  GLdouble phi, theta, r, y;
+  GLfloat * data;
+  GLdouble c2MPI_Long = 2.0 * M_PI / slices;
+  GLdouble cMPI_Lat = M_PI / stacks;
+  data = malloc(5 * (slices + 1) * (stacks + 1) * sizeof *data);
+  assert(data);
+  for(i = 0, k = 0; i <= (int)stacks; ++i) {
+    theta  = -M_PI_2 + i * cMPI_Lat;
+    y = sin(theta);
+
+    //r = 0.8 + 0.3 * sin(2 * pow((y+0.3),2)-3.8);
+    r = 0.002 * (-1 * pow(5*y+1, 3) + 200 + 1.8*(3 * cos(10*y)-90*y+110));
+    for(j = 0; j <= (int)slices; ++j) {
+    phi = j * c2MPI_Long;
+    data[k++] = r * cos(phi);
+    data[k++] = y;
+    data[k++] = r * sin(phi);
+    data[k++] = phi / (2.0 * M_PI);
+    data[k++] = (theta + M_PI_2) / M_PI;
+    }
+  }
+  return data;
+}
+GLuint gl4dgGenTeapotChapf_V2(GLuint slices, GLuint stacks) {
+  GLfloat * idata = NULL;
+  GL4Dvaoindex * index = NULL;
+  GLuint i = genId();
+  gsphere_t * s = malloc(sizeof *s);
+  assert(s);
+  _garray[i].geom = s;
+  _garray[i].type = GE_SPHERE;
+  s->slices = slices; s->stacks = stacks;
+  idata = mkTeapotChapVerticesf_V2(slices, stacks);
+  SELECT_GEOMETRY_OPTIMIZATION(index, s, slices + 1, stacks + 1);
+  glGenVertexArrays(1, &_garray[i].vao);
+  glBindVertexArray(_garray[i].vao);
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+  glEnableVertexAttribArray(2);
+  glGenBuffers(2, s->buffers);
+  glBindBuffer(GL_ARRAY_BUFFER, s->buffers[0]);
+  glBufferData(GL_ARRAY_BUFFER, 5 * (slices + 1) * (stacks + 1) * sizeof *idata, idata, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)(3 * sizeof *idata));
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[1]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, s->index_row_count * s->index_nb_rows * sizeof *index, index, GL_STATIC_DRAW);
+  free(idata);
+  free(index);
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  return ++i;
+}
+
+////////////////THEO AJOUT
 
 GLuint gl4dgGenSpheref(GLuint slices, GLuint stacks) {
   GLfloat * idata = NULL;

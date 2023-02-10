@@ -84,6 +84,12 @@ extern "C" {
    * \see gl4dgDelete pour le détruire.
    * \see gl4dgSetGeometryOptimizationLevel
    */
+  //* Ajout grp
+  GL4DAPI GLuint    GL4DAPIENTRY gl4dgGenTeapotChapf_V2(GLuint slices, GLuint stacks);
+  GL4DAPI GLuint    GL4DAPIENTRY gl4dgGenTeapotSpoutf_V2(GLuint slices, GLuint stacks, GLuint spout);
+  GL4DAPI GLuint    GL4DAPIENTRY gl4dgGenTeapotf_V2(GLuint slices, GLuint stacks);
+  //* Ajout grp
+
   GL4DAPI GLuint    GL4DAPIENTRY gl4dgGenSpheref(GLuint slices, GLuint stacks);
   /*!\brief Génère un objet-géométrie de type cone et renvoie son identifiant (référence).
    *
