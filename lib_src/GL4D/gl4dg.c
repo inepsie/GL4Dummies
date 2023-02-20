@@ -256,7 +256,8 @@ static GLfloat * biBezier(float * vect_pBezier, int nb_pBezier, int nb_pOut){
 
 
 GLfloat * rotY(float * p, float a){
-  float * rotated = malloc(3 * sizeof *rotated);
+  //float * rotated = malloc(3 * sizeof *rotated);
+  float rotated[] = {0., 0., 0.};
   rotated[0] = cos(a)*p[0] + sin(a)*p[2];
   rotated[1] = p[1];
   rotated[2] = -1*sin(a)*p[0] + cos(a)*p[2];
@@ -306,7 +307,7 @@ GLuint gl4dgGenTeapotSpoutf_V2(GLuint slices, GLuint stacks, GLuint spout) {
   }
   assert(courbe_points);//same
   idata = mkTeapotSpoutVerticesf_V2(courbe_points, slices, stacks, spout);
-  SELECT_GEOMETRY_OPTIMIZATION(index, s, slices, stacks + 1);
+  SELECT_GEOMETRY_OPTIMIZATION(index, s, slices+1 , stacks+1);
   glGenVertexArrays(1, &_garray[i].vao);
   glBindVertexArray(_garray[i].vao);
   glEnableVertexAttribArray(0);
@@ -314,14 +315,15 @@ GLuint gl4dgGenTeapotSpoutf_V2(GLuint slices, GLuint stacks, GLuint spout) {
   glEnableVertexAttribArray(2);
   glGenBuffers(2, s->buffers);
   glBindBuffer(GL_ARRAY_BUFFER, s->buffers[0]);
-  glBufferData(GL_ARRAY_BUFFER, 6 * (slices + 1) * (stacks + 1) * sizeof *idata, idata, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)(3 * sizeof *idata));
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (6 * sizeof *idata), (const void *)(3 * sizeof *idata));
+  glBufferData(GL_ARRAY_BUFFER, 5 * (slices + 1) * (stacks + 1) * sizeof *idata, idata, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)(0 * sizeof *idata));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (5 * sizeof *idata), (const void *)(3 * sizeof *idata));
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[1]);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, s->index_row_count * s->index_nb_rows * sizeof *index, index, GL_STATIC_DRAW);
   free(idata);
   free(index);
+  free(courbe_points);
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -329,14 +331,15 @@ GLuint gl4dgGenTeapotSpoutf_V2(GLuint slices, GLuint stacks, GLuint spout) {
 }
 //Sur chacun des points d'une courbe on place des points sur le plan orthogonal associé afin de générer du volume:
 static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint stacks, GLuint spout) {
+  int k;
   GLdouble y, z, phi;
   GLdouble c2MPI_Long = 2.0 * M_PI / slices;
   GLfloat rotz, roty;
   GLfloat p[3] = { 0.0, 0.0, 0.0 };
   GLfloat normale[3] = { 0.0, 0.0, 0.0 };
   //Allocation du vecteur de sortie:
-  GLfloat * data = malloc((stacks+1) * (slices+1) * 3 * 2 * sizeof *data);
-  for(int j=0 ; j <= (int)(stacks) ; ++j){
+  GLfloat * data = malloc(5 * (slices + 1) * (stacks + 1) * sizeof *data);
+  for(int j = 0, k = 0 ; j <= (int)(stacks) ; ++j){
     //Pour chaque point X de la courbe on calcul les rotations nécessaire pour rendre colinéaire le vecteur {1,0,0} au vecteur tangent de X
     rotz = atan2(vect[6*j+3+1], vect[6*j+3]);
     roty = /*-1 * */ atan2(vect[6*j+3+2], vect[6*j+3]);
@@ -345,7 +348,7 @@ static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint
       phi = i * c2MPI_Long;
       y = sin(phi);
       z = cos(phi);
-      if(spout){
+      if(spout){// Pour faire varier le diametre du bec, à remplacer par bezier ?
         y *= (1 + 4.0 / (float) (j + 1));
         z *= (1 + 4.0 / (float) (j * j + 1));
       }
@@ -354,6 +357,7 @@ static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint
       p[0] = 0.0f;
       p[1] = y;
       p[2] = z;
+      //V1:
       rotY(rotZ(p, rotz), roty);//Rotation du point p
       normale[0] = p[0];
       normale[1] = p[1];
@@ -361,12 +365,17 @@ static GLfloat * mkTeapotSpoutVerticesf_V2(GLfloat * vect, GLuint slices, GLuint
       p[0] += vect[6*j];
       p[1] += vect[6*j+1];
       p[2] += vect[6*j+2];//Translation pour replacer les points du cercle autour du point de la courbe
-      data[(j*slices+i)*6] = p[0];
-      data[(j*slices+i)*6 + 1] = p[1];
-      data[(j*slices+i)*6 + 2] = p[2];
-      data[(j*slices+i)*6 + 3] = normale[0];
-      data[(j*slices+i)*6 + 4] = normale[1];
-      data[(j*slices+i)*6 + 5] = normale[2];
+      //data[(j*slices+i)*5] = p[0];
+      //data[(j*slices+i)*5 + 1] = p[1];
+      //data[(j*slices+i)*5 + 2] = p[2];
+      //data[(j*slices+i)*5 + 3] = normale[0];
+      //data[(j*slices+i)*5 + 4] = normale[1];
+      //data[(j*slices+i)*5 + 5] = normale[2];
+      data[k++] = p[0];
+      data[k++] = p[1];
+      data[k++] = p[2];
+      data[k++] = normale[0];
+      data[k++] = normale[1];
     }
   }
   return data;
