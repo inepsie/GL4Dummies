@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/bimac/Licence_3/ProgGPU/test_Teapot'
+gcc -I. -I/usr/local/include -I/opt/homebrew/include/SDL2 -D_THREAD_SAFE -Wall -O3 -mmacosx-version-min=10.8 -c window.c -o window.o
+gcc window.o -lm -lSDL2_image -L/usr/local/lib -framework OpenGL -mmacosx-version-min=10.8 -lGL4Dummies -L/opt/homebrew/lib -lSDL2 -o dpts_avec_textures
+make: Leaving directory `/Users/bimac/Licence_3/ProgGPU/test_Teapot'
+ 

@@ -1,0 +1,515 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+
+# Make data base, printed on Thu Mar 10 15:09:53 2022
+
+# Variables
+
+# environment
+VSCODE_GIT_ASKPASS_MAIN = /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+OPAM_SWITCH_PREFIX = /Users/bimac/.opam/default
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+ 
+# environment
+OCAML_TOPLEVEL_PATH = /Users/bimac/.opam/default/lib/toplevel
+# makefile (from `Makefile', line 26)
+OBJ = $(SOURCES:.c=.o)
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# makefile (from `Makefile', line 52)
+CPPFLAGS = -I. -I/usr/local/include $(shell sdl2-config --cflags)
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/bimac/Licence_3/ProgGPU/test_Teapot
+# makefile (from `Makefile', line 6)
+SHELL = /bin/sh
+# makefile (from `Makefile', line 10)
+RM = rm -f
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 46)
+CFLAGS = -Wall -O3 -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+# makefile (from `Makefile', line 29)
+DISTFILES = $(SOURCES) Makefile $(HEADERS) $(DOXYFILE) $(EXTRAFILES)
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# makefile (from `Makefile', line 14)
+CP = rsync -R
+# makefile (from `Makefile', line 25)
+SOURCES = window.c
+# makefile (from `Makefile', line 28)
+EXTRAFILES = COPYING $(wildcard shaders/*.?s)  $(wildcard images/*) 
+# makefile (from `Makefile', line 22)
+VERSION = 1.0
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# environment
+INFOPATH = /opt/homebrew/share/info:/opt/homebrew/share/info:
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/q2/9ynqrdn55ps4c5hptk0krcx00000gn/T/vscode-ipc-20683a41-ec73-472f-a444-78fe0ec9b965.sock
+# environment
+VSCODE_CWD = /Users/bimac/Licence_3/ProgGPU/test_Teapot
+# environment
+PATH = /Users/bimac/.opam/default/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Library/Apple/usr/bin:/Users/bimac/.opam/default/bin:/opt/homebrew/bin:/opt/homebrew/sbin
+# makefile (from `Makefile', line 13)
+CHMOD = chmod
+# environment
+CPATH = /opt/homebrew/include:/Users/bimac/Licence_3/ProgGPU/GL4Dummies/lib_src:/opt/homebrew/include/SDL2:
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# makefile (from `Makefile', line 53)
+LDFLAGS = -lm -lSDL2_image -L/usr/local/lib -framework OpenGL -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET) -lGL4Dummies $(shell sdl2-config --libs)
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# makefile (from `Makefile', line 45)
+MACOSX_DEPLOYMENT_TARGET = 10.8
+# makefile (from `Makefile', line 9)
+ECHO = echo
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.EDIk5XZQlR/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/bimac/Licence_3/ProgGPU/test_Teapot
+# environment
+HOMEBREW_CELLAR = /opt/homebrew/Cellar
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+MANPATH = /opt/homebrew/share/man:/usr/share/man:/usr/local/share/man:/Library/TeX/Distributions/.DefaultTeX/Contents/Man:/opt/homebrew/share/man:
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /Users/bimac
+# default
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CLI = 1
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/bimac/Library/Application Support/Code/CachedData/8908a9ca0f221f36507231afb39d2d8d1e182702
+# makefile (from `Makefile', line 11)
+TAR = tar
+# environment
+LOGNAME = bimac
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# makefile (from `Makefile', line 24)
+HEADERS = 
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# makefile (from `Makefile', line 12)
+MKDIR = mkdir
+# environment
+OPAMNOENVNOTICE = true
+# environment
+MAKELEVEL := 0
+# environment
+XPC_FLAGS = 0x0
+# environment
+COLORTERM = truecolor
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 3
+# makefile (from `Makefile', line 8)
+CC = gcc
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = bimac
+# environment
+CAML_LD_LIBRARY_PATH = /Users/bimac/.opam/default/lib/stublibs:/opt/homebrew/lib/ocaml/stublibs:/opt/homebrew/lib/ocaml
+# makefile
+.DEFAULT_GOAL := all
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# environment
+VSCODE_GIT_ASKPASS_EXTRA_ARGS = --ms-enable-electron-run-as-node
+# environment
+TERM_PROGRAM = vscode
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/q2/9ynqrdn55ps4c5hptk0krcx00000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/bimac/Library/Application Support/Code/1.65.1-main.sock
+# environment
+VSCODE_GIT_ASKPASS_NODE = /Applications/Visual Studio Code.app/Contents/MacOS/Electron
+# environment
+PYTHONPATH = :/Users/bimac/Library/Python/3.9/lib/python/site-packages:/Users/bimac/Library/Python/3.9/lib/python/site-packages
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+TERM_PROGRAM_VERSION = 1.65.1
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.14392705.14392711.AF85D06F-19D8-4955-99F3-B33F05A63C08
+# environment
+HOMEBREW_PREFIX = /opt/homebrew
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# makefile (from `Makefile', line 27)
+DOXYFILE = documentation/Doxyfile
+# automatic
++F = $(notdir $+)
+# environment
+HOMEBREW_REPOSITORY = /opt/homebrew
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x1
+# environment
+COMMAND_MODE = unix2003
+# environment
+GIT_ASKPASS = /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+# default
+MAKEFILES := 
+# makefile (from `Makefile', line 21)
+PROGNAME = dpts_avec_textures
+# automatic
+<F = $(notdir $<)
+# environment
+LC_ALL = C
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+VSCODE_GIT_IPC_HANDLE = /var/folders/q2/9ynqrdn55ps4c5hptk0krcx00000gn/T/vscode-git-24c4cb1010.sock
+# makefile (from `Makefile', line 23)
+distdir = $(PROGNAME)-$(VERSION)
+# environment
+LANG = C
+# environment
+TERM = xterm-256color
+# environment
+VSCODE_PID = 78489
+# variable set hash-table stats:
+# Load=104/1024=10%, Rehash=0, Collisions=6/171=4%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777233, inode 15455317): 9 files, no impossibilities.
+# images (device 16777233, inode 15455320): 20 files, no impossibilities.
+# shaders (device 16777233, inode 15455343): 4 files, no impossibilities.
+
+# 33 files, no impossibilities in 3 directories.
+
+# Implicit Rules
+
+%.o: %.c
+#  commands to execute (from `Makefile', line 61):
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	
+
+# 1 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+# Not a target:
+images/teapot_motifs.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/metal_01.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: dpts_avec_textures
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/8=0%
+
+# Not a target:
+images/or.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/metal_02.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/torus.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+window.o: window.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `window'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := window.o
+# automatic
+# % := 
+# automatic
+# * := window
+# automatic
+# + := window.c
+# automatic
+# | := 
+# automatic
+# < := window.c
+# automatic
+# ^ := window.c
+# automatic
+# ? := window.c
+ 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/18=6%
+#  commands to execute (from `Makefile', line 61):
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	
+
+# Not a target:
+images/sphere.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+shaders/depTex.fs:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dpts_avec_textures: window.o
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/8=0%
+#  commands to execute (from `Makefile', line 58):
+	$(CC) $(OBJ) $(LDFLAGS) -o $(PROGNAME)
+	
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/or_02.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/drap_02.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2021-01-20 09:35:11
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+documentation/Doxyfile:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+shaders/depTex.vs:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+COPYING:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/images.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/porcelaine_tex.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/cube.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+window.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-10 15:06:56
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+images/or_03.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 80):
+	@$(RM) -r $(PROGNAME) $(OBJ) *~ $(distdir).tgz gmon.out core.* documentation/*~ shaders/*~ GL4D/*~ documentation/html dna.txt assimp_log.txt
+	
+
+# Not a target:
+images/chapeau.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/or_05.jpeg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dist: distdir
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 64):
+	$(CHMOD) -R a+r $(distdir)
+	$(TAR) zcvf $(distdir).tgz $(distdir)
+	$(RM) -r $(distdir)
+	
+
+# Not a target:
+images/chapeau.xcf.bz2:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/or_04.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+images/quad.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+distdir: window.c Makefile documentation/Doxyfile COPYING shaders/depTex.fs shaders/depTex.vs images/chapeau.jpg images/chapeau.xcf.bz2 images/cube.jpg images/drap.jpg images/drap_02.jpg images/images.jpeg images/metal_01.jpeg images/metal_02.jpeg images/or.jpeg images/or_02.jpg images/or_03.jpeg images/or_04.jpg images/or_05.jpeg images/porcelaine_tex.jpg images/quad.jpg images/sphere.jpg images/teapot_motifs.jpg images/torus.jpg
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 69):
+	$(RM) -r $(distdir)
+	$(MKDIR) $(distdir)
+	$(CHMOD) 777 $(distdir)
+	$(CP) $(DISTFILES) $(distdir)
+	
+
+doc: documentation/Doxyfile
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 75):
+	cat $< | sed -e "s/PROJECT_NAME *=.*/PROJECT_NAME = $(PROGNAME)/" | sed -e "s/PROJECT_NUMBER *=.*/PROJECT_NUMBER = $(VERSION)/" >> $<.new
+	mv -f $<.new $<
+	cd documentation && doxygen && cd ..
+	
+
+# Not a target:
+images/drap.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=33/1024=3%, Rehash=0, Collisions=1/77=1%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Thu Mar 10 15:09:53 2022
+
+ 
